@@ -1,8 +1,14 @@
-﻿namespace WokHub.DTO
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace WokHub.DTO
 {
     public class LoginDTO
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
+        [DisplayName("email"), Required]
+        public string? Email { get; set; }
+
+        [DisplayName("password"), Required]
+        public string? Password { get; set; }
     }
 }

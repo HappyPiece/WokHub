@@ -1,8 +1,14 @@
-﻿namespace WokHub.DTO
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace WokHub.DTO
 {
     public class AuthenticateSuccessDTO
     {
-        public string AccessToken { get; set; }
-        public string RefreshToken { get; set; }
+        [DisplayName("accessToken"), Required]
+        public string? AccessToken { get; set; }
+        
+        [DisplayName("refreshToken"), Required]
+        public string? RefreshToken { get; set; }
     }
 }

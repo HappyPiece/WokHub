@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WokHub.DAL;
@@ -11,9 +12,11 @@ using WokHub.DAL;
 namespace WokHub.Migrations
 {
     [DbContext(typeof(WokHubDbContext))]
-    partial class WokHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230209084647_Add user model properties")]
+    partial class Addusermodelproperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,17 +34,11 @@ namespace WokHub.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
-                    b.Property<string>("BirthDate")
-                        .HasColumnType("text");
-
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
                     b.Property<string>("FullName")
                         .HasColumnType("text");
-
-                    b.Property<int?>("Gender")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Password")
                         .HasColumnType("text");
@@ -55,6 +52,9 @@ namespace WokHub.Migrations
                     b.Property<DateTime?>("RefreshTokenExpiryTime")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("birthDate")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
@@ -62,7 +62,7 @@ namespace WokHub.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("73095614-cd16-4e7d-92ed-33b99e528623"),
+                            Id = new Guid("7d885e87-7481-4606-80ed-5eda5a26254b"),
                             Email = "aboba@gmail.com",
                             Password = "aboba123"
                         });

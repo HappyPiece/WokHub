@@ -4,12 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using WokHub.DAL;
+using WokHub.DAL.Models;
 using WokHub.DTO;
 using WokHub.Services;
 
 namespace WokHub.Controllers
 {
-    [Route("api/auth")]
+    [Route("api/account")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -20,6 +21,40 @@ namespace WokHub.Controllers
         {
             _wokHubDbContext = wokHubDbContext ?? throw new ArgumentNullException("DbContext not supplied");
             _tokenService = tokenService ?? throw new ArgumentNullException("tokenService not supplied");
+        }
+
+        [HttpPost, Route("register")]
+        public async Task<IActionResult> Register(RegisterDTO registerDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (await _wokHubDbContext.Users.AnyAsync(x => (x.Email == registerDTO.Email)))
+            {
+                return BadRequest("User with such Email already exists");
+            }
+
+            await _wokHubDbContext.Users.AddAsync(new UserModel
+            {
+                Id = Guid.NewGuid(),
+                Email = registerDTO.Email,
+                Address = registerDTO.Address,
+                BirthDate = registerDTO.BirthDate,
+                FullName = registerDTO.FullName,
+                Gender = registerDTO.Gender,
+                Password = registerDTO.Password,
+                PhoneNumber = registerDTO.PhoneNumber
+            });
+
+            await _wokHubDbContext.SaveChangesAsync();
+
+            return await Login(new LoginDTO
+            {
+                Password = registerDTO.Password,
+                Email = registerDTO.Email
+            });
         }
 
         [HttpPost, Route("login")]
@@ -88,7 +123,7 @@ namespace WokHub.Controllers
             });
         }
 
-        [HttpPost, Authorize, Route("revoke")]
+        [HttpPost, Authorize, Route("logout")]
         public async Task<IActionResult> Revoke()
         {
             var user = await _wokHubDbContext.Users.FirstOrDefaultAsync(x => x.Id.ToString() == User.Identity.Name);
