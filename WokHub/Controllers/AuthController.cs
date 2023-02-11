@@ -36,7 +36,7 @@ namespace WokHub.Controllers
                 return BadRequest("User with such Email already exists");
             }
 
-            await _wokHubDbContext.Users.AddAsync(new UserModel
+            await _wokHubDbContext.Users.AddAsync(new User
             {
                 Id = Guid.NewGuid(),
                 Email = registerDTO.Email,
